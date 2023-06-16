@@ -38,6 +38,48 @@ namespace concessionária.Controllers
                 data = veiculos
             });
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateVeiculo(int id, concessionária.Models.Veiculos veiculo)
+        {
+            var existingVeiculo = await _apDbContext.Veiculos.FindAsync(id);
+            if (existingVeiculo == null)
+            {
+                return NotFound();
+            }
 
+            existingVeiculo.Placa = veiculo.Placa;
+            existingVeiculo.Marca = veiculo.Marca;
+            existingVeiculo.Preco = veiculo.Preco;
+            existingVeiculo.Ano = veiculo.Ano;
+
+            await _apDbContext.SaveChangesAsync();
+
+            return Ok(new
+            {
+                success = true,
+                data = existingVeiculo
+            });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteVeiculo(int id)
+        {
+            var veiculo = await _apDbContext.Veiculos.FindAsync(id);
+            if (veiculo == null)
+            {
+                return NotFound();
+            }
+
+            _apDbContext.Veiculos.Remove(veiculo);
+            await _apDbContext.SaveChangesAsync();
+
+            return Ok(new
+            {
+                success = true,
+                data = veiculo
+            });
+        }
     }
 }
+    
+
