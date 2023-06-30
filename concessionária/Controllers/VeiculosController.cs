@@ -10,9 +10,9 @@ namespace concessionária.Controllers
     [ApiController]
     public class VeiculosController : ControllerBase
     {
-        private readonly VeiculosRepository _veiculosRepository;
+        private readonly IVeiculosRepository _veiculosRepository;
 
-        public VeiculosController(VeiculosRepository veiculosRepository)
+        public VeiculosController(IVeiculosRepository veiculosRepository)
         {
             _veiculosRepository = veiculosRepository;
         }

@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("ServerConnection")));
 
-builder.Services.AddScoped<VeiculosRepository>();
+builder.Services.AddScoped<IVeiculosRepository, VeiculosRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

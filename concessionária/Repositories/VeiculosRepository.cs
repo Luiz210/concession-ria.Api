@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace concessionária.Repositories
 {
-    public class VeiculosRepository
+    public class VeiculosRepository : IVeiculosRepository
     {
         private readonly ApDbContext _apDbContext;
 
@@ -20,18 +20,19 @@ namespace concessionária.Repositories
             return await _apDbContext.Veiculos.ToListAsync();
         }
 
-        public async Task CreateVeiculos(Veiculos veiculos)
+        public async Task<Veiculos> CreateVeiculos(Veiculos veiculos)
         {
             _apDbContext.Veiculos.Add(veiculos);
             await _apDbContext.SaveChangesAsync();
+            return veiculos;
         }
 
-        public async Task UpdateVeiculo(int id, Veiculos veiculo)
+        public async Task<Veiculos> UpdateVeiculo(int id, Veiculos veiculo)
         {
             var existingVeiculo = await _apDbContext.Veiculos.FindAsync(id);
             if (existingVeiculo == null)
             {
-                return;
+                return null;
             }
 
             existingVeiculo.Placa = veiculo.Placa;
@@ -40,18 +41,20 @@ namespace concessionária.Repositories
             existingVeiculo.Ano = veiculo.Ano;
 
             await _apDbContext.SaveChangesAsync();
+            return existingVeiculo;
         }
 
-        public async Task DeleteVeiculo(int id)
+        public async Task<bool> DeleteVeiculo(int id)
         {
             var veiculo = await _apDbContext.Veiculos.FindAsync(id);
             if (veiculo == null)
             {
-                return;
+                return false;
             }
 
             _apDbContext.Veiculos.Remove(veiculo);
             await _apDbContext.SaveChangesAsync();
+            return true;
         }
     }
 }
