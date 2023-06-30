@@ -1,9 +1,8 @@
-﻿using concessionária.Context;
-using concessionária.Migrations;
+﻿using concessionária.Models;
+using concessionária.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using concessionária.Controllers;
-using concessionária.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace concessionária.Controllers
 {
@@ -11,26 +10,28 @@ namespace concessionária.Controllers
     [ApiController]
     public class VeiculosController : ControllerBase
     {
-        private readonly ApDbContext _apDbContext;
+        private readonly VeiculosRepository _veiculosRepository;
 
-        public VeiculosController(ApDbContext apDbContext)
+        public VeiculosController(VeiculosRepository veiculosRepository)
         {
-            _apDbContext = apDbContext;
+            _veiculosRepository = veiculosRepository;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetVeiculos()
         {
+            List<Veiculos> veiculos = await _veiculosRepository.GetVeiculos();
             return Ok(new
             {
-                sucess = true,
-                data = await _apDbContext.Veiculos.ToListAsync()
+                success = true,
+                data = veiculos
             });
         }
+
         [HttpPost]
-        public async Task<IActionResult> CreateVeiculos(concessionária.Models.Veiculos veiculos)
+        public async Task<IActionResult> CreateVeiculos(Veiculos veiculos)
         {
-            _apDbContext.Veiculos.Add(veiculos);
-            await _apDbContext.SaveChangesAsync();
+            await _veiculosRepository.CreateVeiculos(veiculos);
 
             return Ok(new
             {
@@ -38,40 +39,11 @@ namespace concessionária.Controllers
                 data = veiculos
             });
         }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateVeiculo(int id, concessionária.Models.Veiculos veiculo)
+        public async Task<IActionResult> UpdateVeiculo(int id, Veiculos veiculo)
         {
-            var existingVeiculo = await _apDbContext.Veiculos.FindAsync(id);
-            if (existingVeiculo == null)
-            {
-                return NotFound();
-            }
-
-            existingVeiculo.Placa = veiculo.Placa;
-            existingVeiculo.Marca = veiculo.Marca;
-            existingVeiculo.Preco = veiculo.Preco;
-            existingVeiculo.Ano = veiculo.Ano;
-
-            await _apDbContext.SaveChangesAsync();
-
-            return Ok(new
-            {
-                success = true,
-                data = existingVeiculo
-            });
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteVeiculo(int id)
-        {
-            var veiculo = await _apDbContext.Veiculos.FindAsync(id);
-            if (veiculo == null)
-            {
-                return NotFound();
-            }
-
-            _apDbContext.Veiculos.Remove(veiculo);
-            await _apDbContext.SaveChangesAsync();
+            await _veiculosRepository.UpdateVeiculo(id, veiculo);
 
             return Ok(new
             {
@@ -79,7 +51,17 @@ namespace concessionária.Controllers
                 data = veiculo
             });
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteVeiculo(int id)
+        {
+            await _veiculosRepository.DeleteVeiculo(id);
+
+            return Ok(new
+            {
+                success = true,
+                data = id
+            });
+        }
     }
 }
-    
-
