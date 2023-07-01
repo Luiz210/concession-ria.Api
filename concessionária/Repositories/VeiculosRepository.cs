@@ -24,6 +24,7 @@ namespace concessionária.Repositories
         {
             _apDbContext.Veiculos.Add(veiculos);
             await _apDbContext.SaveChangesAsync();
+
             return veiculos;
         }
 
@@ -41,6 +42,7 @@ namespace concessionária.Repositories
             existingVeiculo.Ano = veiculo.Ano;
 
             await _apDbContext.SaveChangesAsync();
+
             return existingVeiculo;
         }
 
@@ -54,6 +56,7 @@ namespace concessionária.Repositories
 
             _apDbContext.Veiculos.Remove(veiculo);
             await _apDbContext.SaveChangesAsync();
+
             return true;
         }
     }

@@ -1,8 +1,6 @@
 ﻿using concessionária.Models;
 using concessionária.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace concessionária.Controllers
 {
@@ -10,11 +8,11 @@ namespace concessionária.Controllers
     [ApiController]
     public class VeiculosController : ControllerBase
     {
-        private readonly IVeiculosRepository _veiculosRepository;
+        private readonly VeiculosRepository _veiculosRepository;
 
         public VeiculosController(IVeiculosRepository veiculosRepository)
         {
-            _veiculosRepository = veiculosRepository;
+            _veiculosRepository = (VeiculosRepository?)veiculosRepository;
         }
 
         [HttpGet]
