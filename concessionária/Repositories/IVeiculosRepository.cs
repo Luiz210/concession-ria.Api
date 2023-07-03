@@ -1,6 +1,4 @@
 ﻿using concessionária.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace concessionária.Repositories
 {

@@ -1,7 +1,5 @@
 ﻿using concessionária.Models;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
-using Microsoft.Extensions.Configuration;
 
 namespace concessionária.Context
 {
